@@ -23,22 +23,31 @@ Das Programm ist für die Verarbeitung von **PNG-Dateien** optimiert und unterst
 
 ## Voraussetzungen
 
-Um dieses Projekt auszuführen, wird eine funktionierende OpenCV-Installation auf dem System benötigt. Die native Bibliothek muss für die JVM verfügbar sein.
+Um dieses Projekt auszuführen, wird eine funktionierende Docker-Installation auf dem System benötigt.
 
-- **OpenCV-Version**: Es muss die korrekte Version von OpenCV installiert sein, die in der [pom.xml](pom.xml) dieses Projekts definiert ist. 
-- **Download**: Sie können die für Ihr Betriebssystem passende Version von der offiziellen Releases-Seite herunterladen: [https://opencv.org/releases/](https://opencv.org/releases/)
+## Docker-Benutzung
 
+### 1. Docker-Image erstellen
 
-## Benutzung
+Führen Sie den folgenden Befehl im Stammverzeichnis des Projekts aus, um das Docker-Image zu erstellen:
 
-1.  **Kompilieren des Projekts:**
-    ```bash
-    mvn clean package
-    ```
+```bash
+docker build -t stamp-extractor .
+```
 
-2.  **Ausführen des Programms:**
-    ```bash
-    java -jar target/stamp-extractor-1.0.0.jar [INPUT_ORDNER] [OUTPUT_ORDNER]
-    ```
-    - `[INPUT_ORDNER]` (optional): Der Ordner, der die zu verarbeitenden `.png`-Bilder enthält. Standardmäßig wird der Ordner `input` verwendet.
-    - `[OUTPUT_ORDNER]` (optional): Der Ordner, in dem die ausgeschnittenen Briefmarken gespeichert werden sollen. Standardmäßig wird ein Ordner namens `output` erstellt.
+### 2. Anwendung mit Docker ausführen
+
+Führen Sie den folgenden Befehl aus, um die Anwendung in einem Docker-Container zu starten. Dieser Befehl bindet die lokalen Ordner `input` und `output` in den Container ein, sodass die Anwendung auf Ihre Bilder zugreifen und die Ergebnisse speichern kann.
+
+```bash
+docker run --rm -v "$(pwd)/input:/app/input" -v "$(pwd)/output:/app/output" stamp-extractor
+```
+
+- **Input-Ordner**: Legen Sie Ihre `.png`-Dateien in den `input`-Ordner im Stammverzeichnis des Projekts.
+- **Output-Ordner**: Die extrahierten Briefmarken werden im `output`-Ordner gespeichert.
+
+Sie können auch benutzerdefinierte Ordner angeben, indem Sie die Pfade im Befehl anpassen:
+
+```bash
+docker run --rm -v "/absoluter/pfad/zu/ihrem/input:/app/input" -v "/absoluter/pfad/zu/ihrem/output:/app/output" stamp-extractor
+```
